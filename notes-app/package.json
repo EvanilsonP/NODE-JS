@@ -4,12 +4,14 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "dev": "npx nodemon app.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Evanilson P.",
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.1.0",
+    "nodemon": "^2.0.20",
     "validator": "^13.7.0"
   }
 }
