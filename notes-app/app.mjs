@@ -1,11 +1,12 @@
-import validator from 'validator';
-import getNotes from './notes.js';
 import chalk from 'chalk';
+import getNotes from './notes.js';
 
-const msg = getNotes();
-console.log(msg);
+const command = process.argv[2];
 
-// console.log(validator.isEmail('pevanilson99@gmail.com'));
-// console.log(validator.isURL("https://www.google.com/"));
-console.log(chalk.green.bold.inverse("Success!"));
-console.log(chalk.red.bold.inverse("You've been hacked by me!"));
+console.log(process.argv);
+
+if(command === 'add') {
+    console.log(chalk.green('Adding note!'));
+} else if (command === 'remove') {
+    console.log(chalk.red('Removing note...'));
+}
