@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "npx nodemon app.mjs",
+    "dev": "npx nodemon app.js",
+    "dev2": "npx nodemon 3-arrow-function-challenge.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Evanilson P.",
