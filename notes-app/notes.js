@@ -1,17 +1,11 @@
 const fs = require('fs');
 const pc = require('picocolors');
 
-const getNotes =  () => {
-    console.log("Your notes...");
-}
-
 const addNotes = (title, body) => {
     const notes = loadNotes();
-    const duplicateNotes = notes.filter((note) => { // Checking whether there is duplicate notes or not
-        return note.title === title;
-    });
+    const duplicateNote = notes.find((note) => note.title === title);
 
-    if(duplicateNotes.length === 0) { //  This means there is no duplicate notes
+    if(!duplicateNote) { //  If there is no duplicate note
         notes.push({
             title: title,
             body: body
@@ -67,9 +61,21 @@ const listNotes = () => {
     });
 }
 
+const readNote = (title) => {
+    const notes = loadNotes();
+    const note = notes.find((note) => note.title === title);
+
+    if(note) {
+        console.log(pc.bgGreen(note.title));
+        console.log(note.body);
+    } else {
+        console.log(pc.bgRed("No note found!"));
+    }
+}
+
 module.exports = {
-    getNotes: getNotes,
     addNotes: addNotes,
     removeNote: removeNote,
-    listNotes: listNotes
+    listNotes: listNotes,
+    readNote: readNote
 }
