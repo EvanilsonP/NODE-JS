@@ -1,25 +1,27 @@
 const fs = require('fs');
+const pc = require('picocolors');
+
 const getNotes = function () {
     console.log("Your notes...");
 }
 
 const addNotes = function (title, body) {
     const notes = loadNotes();
-    const duplicateNotes = notes.filter((note) => { // Checking weather there is duplica notes or not
+    const duplicateNotes = notes.filter((note) => { // Checking whether there is duplicate notes or not
         return note.title === title;
     });
 
-    if(duplicateNotes.length === 0) { //  This means there is no duplica notes
+    if(duplicateNotes.length === 0) { //  This means there is no duplicate notes
         notes.push({
             title: title,
             body: body
         });
     
         saveNotes(notes);
-        console.log("New note added!");
+        console.log(pc.green("New note added!"));
 
     } else {
-        console.log('Note title taken!');
+        console.log(pc.red('Warning: Note title already taken!'));
     }
 }
 
@@ -40,7 +42,23 @@ const loadNotes = function () {
 
 }
 
+const removeNote = function (title) {
+    const notes = loadNotes();
+    const notesToKeep = notes.filter((note) => {
+        return note.title !== title;
+    });
+
+    if(notes.length > notesToKeep.length) {                 // Checking whether the note was removed or not and giving a message
+        console.log(pc.green("Note removed successfully!"));
+    } else {
+        console.log(pc.red("No note found!"));
+    }
+
+    saveNotes(notesToKeep);
+}
+
 module.exports = {
     getNotes: getNotes,
-    addNotes: addNotes
+    addNotes: addNotes,
+    removeNote: removeNote,
 }
