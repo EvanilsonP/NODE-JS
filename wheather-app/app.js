@@ -1,8 +1,12 @@
 const request = require('request');
 
-const url = 'http://api.weatherstack.com/current?access_key=3e86df59719916626c79c072269fa2fb&query=37.8267,-122.4233';
+const url = ''; // Setting up to show temperature in Celsius / F / Kelvin
 
-request({ url: url}, (error, response) => { 
-    const data = JSON.parse(response.body);             // Catching and parsing the body which contains a tons of info
-    console.log(data.current);
+request({ url: url, json: true}, (error, response) => { /// json: Saying we would like a request to parse this as JSON.
+    // console.log(response.body.current);
+    const temperature = response.body.current.temperature;
+    const feelslike = response.body.current.feelslike;
+    const overcast = response.body.current.weather_descriptions[0];
+
+    console.log(`${overcast}. It is currently ${temperature} degrees out. It feels like ${feelslike} degrees out`);
 });
