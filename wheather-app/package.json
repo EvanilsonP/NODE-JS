@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "dev": "npx nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^1.1.2",
+    "nodemon": "^2.0.20",
     "picocolors": "^1.0.0",
     "postman-request": "^2.88.1-postman.31",
     "request": "^2.88.2"
