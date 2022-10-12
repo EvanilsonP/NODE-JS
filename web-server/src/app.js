@@ -1,15 +1,15 @@
 const path = require('path');
 const express = require('express');
 
-const publicDirectoryPath = path.join(__dirname, '../public');            // Manipulating directory path and accessing a specific folder
-const publicDirectoryPath2 = path.join(__dirname, '..public/about.html');
-const publicDirectoryPath3 = path.join(__dirname, '..public/help.html');
+const public = path.join(__dirname, '../public');            // Manipulating directory path and accessing a specific folder
+const publicAbout = path.join(__dirname, '..public/about.html');
+const publicHelp = path.join(__dirname, '..public/help.html');
 
 const app = express();
 
-app.use(express.static(publicDirectoryPath));
-app.use(express.static(publicDirectoryPath2));
-app.use(express.static(publicDirectoryPath3));
+app.use(express.static(public));
+app.use(express.static(publicAbout));
+app.use(express.static(publicHelp));
 
 app.get('/weather', (req, res) => { 
     res.send({
