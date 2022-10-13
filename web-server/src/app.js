@@ -1,16 +1,18 @@
 const path = require('path');
 const express = require('express');
 
+// Define paths for Express config
 const public = path.join(__dirname, '../public');            // Manipulating directory path and accessing a specific folder
-const publicAbout = path.join(__dirname, '..public/about.html');
-const publicHelp = path.join(__dirname, '..public/help.html');
+const viewsPath = path.join(__dirname, '../templates');      // Express is going to look for views folder by default. We can manipulate it.
 
 const app = express();
 
-app.set('view engine', 'hbs');
+// Setup handlebars engine and views location
+app.set('views', viewsPath);                                 // And we can use it right here.
+app.set('view engine', 'hbs');                               // Tells Express which extension to associate with the template when you call res.render() 
+
+// Setup static directory to serve
 app.use(express.static(public));
-app.use(express.static(publicAbout));
-app.use(express.static(publicHelp));
 
 app.get('/', (req, res) => {
     res.render('index', {
