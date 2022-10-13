@@ -39,10 +39,26 @@ app.get('/help', (req, res) => {
     })
 });
 
+app.get('/help/*', (req, res) => {
+    res.render('404page', {
+        title: '404',
+        name: 'Evanilson P',
+        errorMesage: 'Help article not found!'
+    });
+});
+
 app.get('/weather', (req, res) => { 
     res.send({
         forecast: 'It is snowing real bad.',
         location: 'New York'
+    });
+});
+
+app.get('*', (req, res) => {
+    res.render('404page', {
+        title: '404',
+        name: 'Evanilson P',
+        errorMesage: 'Page not found.'
     });
 });
 
