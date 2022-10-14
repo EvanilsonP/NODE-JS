@@ -1,6 +1,8 @@
 const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
+const forecast = require('./utils/forecast.js');
+const geocode = require('./utils/geocode.js');
 
 // Define paths for Express config
 const public = path.join(__dirname, '../public');            // Manipulating directory path and accessing a specific folder
@@ -54,10 +56,19 @@ app.get('/weather', (req, res) => {
         })
     }
 
-    res.send({
-        forecast: 'It is snowing real bad.',
-        location: 'New York',
-        address: req.query.address
+    geocode(req.query.address, (error, {lat, long, location}) => {
+        if(error) {
+            return res.send({error});
+        } 
+        forecast(lat, long, (error, forecastData) => {
+            if(error) {
+                return res.send({error});
+        }
+
+        res.send({
+            forecast: forecastData, location,
+            address: req.query.address
+        })
     });
 });
 
