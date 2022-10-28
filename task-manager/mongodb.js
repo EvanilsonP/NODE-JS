@@ -10,29 +10,17 @@ MongoClient.connect(connectionURL, {useNewUrlParser: true}, (error, client) => {
 
     const db = client.db(databaseName);                                           // Using the db method to get the connection for the specific database
 
-    // db.collection('users').updateOne({
-    //     _id: new ObjectId('63596f15c0cba7abe3f316e7')
-    // }, {
-    //     // $set: {
-    //     //     name: 'Mike'
-    //     // }
-
-    //     $inc: {
-    //         age: 1
-    //     }
+    // db.collection('users').deleteMany({
+    //     age: 23
 
     // }).then((result) => {
     //     console.log(result);
     // }).catch((error) => {
     //     console.log(error);
-    // })
+    // });
 
-    db.collection('tasks').updateMany({
-        completed: false
-    }, {
-        $set: {
-            completed: true
-        }
+    db.collection('tasks').deleteMany({
+        completed: true
     }).then((result) => {
         console.log(result);
     }).catch((error) => {
