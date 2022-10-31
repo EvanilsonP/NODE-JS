@@ -34,6 +34,7 @@ app.get('/users/:id', (req, res) => {
     })
 });
 
+
 app.get('/users', (req, res) => {
     User.find({}).then((users) => {
         res.send(users);
@@ -51,5 +52,28 @@ app.post('/tasks', (req, res) => {
         res.status(400).send(e);
     });
 });
+
+app.get('/tasks', (req, res) => {
+    Task.find({}).then((tasks) => {
+        res.status(200).send(tasks);
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+});
+
+app.get('/tasks/:id', (req, res) => {
+    const _id = req.params.id;
+
+    Task.findById(_id).then((task) => {
+        if(!task) {
+            res.status(404).send();
+        }
+        res.send(task);
+    }).catch((e) => {
+        res.status(500).send();
+    })
+});
+
+
 
 app.listen(port, () => console.log(`Server is up on port ${port}`));
