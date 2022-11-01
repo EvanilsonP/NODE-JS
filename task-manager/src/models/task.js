@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 
+// Creating a collection and setting requirements
 const Task = mongoose.model('Tasks', {
     description: { 
         type: String,

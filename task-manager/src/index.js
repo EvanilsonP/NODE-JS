@@ -9,6 +9,7 @@ const Task = require('./models/task');
 
 app.use(express.json());
 
+// Create user
 app.post('/users', (req, res) => {
     const user = new User(req.body);
 
@@ -19,6 +20,7 @@ app.post('/users', (req, res) => {
     });
 });
 
+// Fetch user by ID
 app.get('/users/:id', (req, res) => {
     const _id = req.params.id
 
@@ -34,7 +36,7 @@ app.get('/users/:id', (req, res) => {
     })
 });
 
-
+// Fetch all users
 app.get('/users', (req, res) => {
     User.find({}).then((users) => {
         res.send(users);
@@ -43,6 +45,7 @@ app.get('/users', (req, res) => {
     });
 });
 
+// Create task
 app.post('/tasks', (req, res) => {
     const task = new Task(req.body);
 
@@ -53,6 +56,7 @@ app.post('/tasks', (req, res) => {
     });
 });
 
+// Fetch all tasks
 app.get('/tasks', (req, res) => {
     Task.find({}).then((tasks) => {
         res.status(200).send(tasks);
@@ -61,6 +65,7 @@ app.get('/tasks', (req, res) => {
     });
 });
 
+// Fetch task by ID
 app.get('/tasks/:id', (req, res) => {
     const _id = req.params.id;
 
