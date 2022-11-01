@@ -4,14 +4,14 @@ const Task = require('../models/task');
 
 
 // Create task
-router.post('/tasks', (req, res) => {
+router.post('/tasks', async(req, res) => {
     const task = new Task(req.body);
-
-    task.save().then(() => {
+    try {
+        await task.save();
         res.status(201).send(task);
-    }).catch((e) => {
+    } catch (error) {
         res.status(400).send(e);
-    });
+    }
 });
 
 // Fetch all tasks
@@ -52,7 +52,10 @@ router.patch('/tasks/:id', async(req, res) => {
     }
 
     try {
-        const task = await Task.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true});
+        const task = await Task.findByIdAndUpdate(req.params.id);
+        updates.forEach((update) => task[update] = req.body[update]);
+        await task.save();
+        // const task = await Task.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true});
 
         if(!task) {
             return res.status(404).send();
