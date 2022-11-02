@@ -22,7 +22,6 @@ router.post('/users/login', async (req, res) => {
         res.send({user, token});
         
     } catch (e) {
-        console.log(e.message);
         res.status(400).send({error: `Incorrect password.`});
     }
 });
