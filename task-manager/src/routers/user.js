@@ -22,9 +22,32 @@ router.post('/users/login', async (req, res) => {
         res.send({user, token});
         
     } catch (e) {
+        console.log(e.message);
         res.status(400).send({error: `Incorrect password.`});
     }
 });
+
+router.post('/users/logout', auth, async(req, res) => {
+    try {
+        req.user.tokens = req.user.tokens.filter((token) => {
+            return token.token !== req.token;
+        });
+        await req.user.save();
+        res.send();
+    } catch (e) {
+        res.status(500).send();
+    }
+});
+
+router.post('/users/logoutAll', auth, async(req, res) => {
+    try {
+        req.user.tokens = [];
+        await req.user.save();
+        res.send();
+    } catch (error) {
+        res.status(500).send();
+    }
+})
 
 router.get('/users/me', auth, async (req, res) => {
     res.send(req.user);
@@ -47,6 +70,7 @@ router.get('/users/:id', async (req, res) => {
 });
 
 router.patch('/users/:id', async (req, res) => {
+    // Preventing a non-created field to be updated
     const updates = Object.keys(req.body);
     const allowedUpdates = ['name', 'email', 'password', 'age'];
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
