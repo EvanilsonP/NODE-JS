@@ -20,21 +20,22 @@ router.post('/tasks', auth, async(req, res) => {
 });
 
 // Fetch all tasks
-router.get('/tasks', async (req, res) => {
+router.get('/tasks', auth, async (req, res) => {
     try {
-        const tasks = await Task.find({});
-        res.status(200).send(tasks);
+        await req.user.populate('tasks');
+        res.status(200).send(req.user.tasks);
+
     } catch (e) {
        res.status(500).send(e); 
     }
 });
 
 // Fetch task by ID
-router.get('/tasks/:id', async (req, res) => {
+router.get('/tasks/:id', auth, async (req, res) => {
     const _id = req.params.id;
 
     try {
-        const task = await Task.findById(_id);
+        const task = await Task.findOne({_id, owner: req.user._id});
         if(!task) {
             return res.status(404).send();
         }
@@ -46,7 +47,7 @@ router.get('/tasks/:id', async (req, res) => {
 });
 
 
-router.patch('/tasks/:id', async(req, res) => {
+router.patch('/tasks/:id', auth, async(req, res) => {
     // Preventing non-included fields to be updated
     const updates = Object.keys(req.body);
     const allowedUpdates = ['description', 'completed'];
@@ -57,14 +58,14 @@ router.patch('/tasks/:id', async(req, res) => {
     }
 
     try {
-        const task = await Task.findByIdAndUpdate(req.params.id);
-        updates.forEach((update) => task[update] = req.body[update]);
-        await task.save();
-        // const task = await Task.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true});
+        const task = await Task.findOne({_id: req.params.id, owner: req.user._id}); // Finding a task and owner
 
         if(!task) {
             return res.status(404).send();
         }
+
+        updates.forEach((update) => task[update] = req.body[update]);
+        await task.save();
         res.send(task)
 
     } catch (e) {
@@ -72,9 +73,9 @@ router.patch('/tasks/:id', async(req, res) => {
     }
 });
 
-router.delete('/tasks/:id', async(req, res) => {
+router.delete('/tasks/:id', auth, async(req, res) => {
     try {
-        const task = await Task.findByIdAndDelete(req.params.id);
+        const task = await Task.findOneAndDelete({_id: req.params.id, owner: req.user._id}); // Deleting a task a user created and not being allowed to delete someone's else task
 
         if(!task) {
             res.send(404).send()
