@@ -109,8 +109,8 @@ const upload = multer({
     fileFilter(req, file, cb) {
         // Checking if a document is a match 
         // if(!file.originalname.endsWith('.pdf')) {
-            if(!file.originalname.match(/\.(doc|docx)$/)) {
-            return cb(new Error('Please upload a word document.'));
+            if(!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Please upload an image.'));
         }
         cb(undefined, true);
     }
@@ -119,6 +119,8 @@ const upload = multer({
 
 router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
     res.send();
+}, (error, req, res, next) => {
+    res.status(400).send({error: error.message});
 });
 
 module.exports = router;
