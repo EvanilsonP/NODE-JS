@@ -20,9 +20,18 @@ router.post('/tasks', auth, async(req, res) => {
 });
 
 // Fetch all tasks
+// GET /tasks?completed=true
 router.get('/tasks', auth, async (req, res) => {
+    const match = {};
+
+    if(req.query.completed) {
+        match.completed = req.query.completed === 'true';
+    }
     try {
-        await req.user.populate('tasks');
+        await req.user.populate({
+            path: 'tasks',
+            match
+        });
         res.status(200).send(req.user.tasks);
 
     } catch (e) {
