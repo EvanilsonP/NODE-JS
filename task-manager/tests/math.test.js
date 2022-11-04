@@ -19,3 +19,11 @@ test('Should convert 32 F to 0 C', () => {
     const temperature = celsiusToFahrenheit(0);
     expect(temperature).toBe(32);
 });
+
+test('Async test demo', (done) => {
+    setTimeout(() => {
+        expect(1).toBe(2);
+        done();
+    }, 2000)
+});
+
