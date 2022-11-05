@@ -7,24 +7,26 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const publicDirectoryPath = path.join(__dirname, '../public');
 
 app.use(express.static(publicDirectoryPath));
-// We have a socket.io server that does two things: 
-// server(emit) -> client (receive) - countUpdated
-// client(emit) -> server (receive) - increment
 // Printing a message when a client connects
 io.on('connection', (socket) => {
     console.log('New Websocket connection!');
     // Message when you visite the URL; // emit to a particular connection
     socket.emit('message', 'Welcome!'); 
-    // Emit a message to everybody byt that particular connection.
+    // Emit a message to everybody but that particular connection.
     socket.broadcast.emit('message', 'A new user has joined!');
 
     socket.on('sendMessage', (message) => {
         io.emit('message', message);    // Message to every single client
     });
+
+    socket.on('sendLocation', (coords) => {
+        io.emit('message', `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+    })
+
     // When a user disconnect
     socket.on('disconnect', () => {
         io.emit('message', 'A user has left!');
