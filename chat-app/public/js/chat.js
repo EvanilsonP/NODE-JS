@@ -9,6 +9,10 @@ const $messages = document.querySelector('#messages')
 // Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML
 const locationMessageTemplate = document.querySelector('#location-message-template').innerHTML
+
+// Options // '?username=Evanilson+P&room=Canada'
+const {username, room} = Qs.parse(location.search, { ignoreQueryPrefix: true}) // this takes the query string and we just saw we have access to that on location dot search. (devtools)
+
 // name of the event has to match the one created on socket.emit();
 socket.on('message', (message) => {
     console.log(message);
@@ -68,3 +72,6 @@ $sendLocationButton.addEventListener('click', () => {
         });
     });
 });
+
+// Join is going to accept the username you want to use and the room you're trying to join.
+socket.emit('join', {username, room});
