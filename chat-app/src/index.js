@@ -3,7 +3,8 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');  // Setting up support for socket.io
 const Filter = require('bad-words');
-const { generateMessages } = require('./utils/messages');
+const { generateMessages, generateLocationMessage } = require('./utils/messages');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -33,7 +34,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('sendLocation', (coords, callback) => {           // Sharing location
-        io.emit('locationMessage', `https://google.com/maps?q=${coords.latitude},${coords.longitude}`);
+        io.emit('locationMessage', generateLocationMessage(`https://google.com/maps?q=${coords.latitude},${coords.longitude}`));
         callback();
     })
 
