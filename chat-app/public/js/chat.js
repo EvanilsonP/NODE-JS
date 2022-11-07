@@ -3,11 +3,18 @@ const socket = io()
 const $messageForm = document.querySelector('#message-form');
 const $messageFormInput = document.querySelector('input');
 const $messageFormButton = $messageForm.querySelector('button');
-const $SendLocationButton = document.querySelector('#send-location')
+const $SendLocationButton = document.querySelector('#send-location');
+const $messages = document.querySelector('#messages');
+// Templates
+const messageTemplate = document.querySelector('#message-template').innerHTML;
 
 // name of the event has to match the one created on socket.emit();
 socket.on('message', (message) => {
-    console.log(message)
+    console.log(message);
+    const html = Mustache.render(messageTemplate, {
+        message: message
+    });
+    $messages.insertAdjacentHTML('beforeend', html);
 });
 
 $messageForm.addEventListener('submit', (e) => {
@@ -20,6 +27,7 @@ $messageForm.addEventListener('submit', (e) => {
         setTimeout(() => {
             $messageFormButton.removeAttribute('disabled'); // Enabling the form after sending a message;
         }, 0500);
+
         $messageFormInput.value = '';
         $messageFormInput.focus();
 
@@ -38,6 +46,7 @@ $SendLocationButton.addEventListener('click', () => {
 
     navigator.geolocation.getCurrentPosition((position) => {
         $SendLocationButton.setAttribute('disabled', 'disabled'); // This line of code just disables the button once it is submitted
+        
         socket.emit('sendLocation', {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
