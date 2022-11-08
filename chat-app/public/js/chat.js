@@ -1,3 +1,4 @@
+
 const socket = io()
 // Sending data from server to client;
 const $messageForm = document.querySelector('#message-form')
@@ -14,6 +15,28 @@ const sidebarTemplate = document.querySelector('#sidebar-template').innerHTML
 // Options // '?username=Evanilson+P&room=Canada'
 const {username, room} = Qs.parse(location.search, { ignoreQueryPrefix: true}) // this takes the query string and we just saw we have access to that on location dot search. (devtools)
 
+const autoscroll = () => {
+    // new message element
+    const $newMessage = $messages.lastElementChild;
+
+    // Height of the new message
+    const newMessageStyles = getComputedStyle($newMessage);
+    const newMessageMargin = parseInt(newMessageStyles.marginBottom);
+    const newMessageHeight = $newMessage.offsetHeight + newMessageMargin;
+    // visible height
+    const visibleHeight = $messages.offsetHeight;
+    // Height of messages container
+    const containerHeight = $messages.scrollHeight;
+    // How far have i scrolled?
+    const scrollOffset = $messages.scrollTop + visibleHeight;
+
+    if(containerHeight - newMessageHeight <= scrollOffset) {
+        $messages.scrolltop = $messages.scrollHeight
+    }   
+
+    console.log(newMessageStyles);
+}
+
 // name of the event has to match the one created on socket.emit();
 socket.on('message', (message) => {
     console.log(message);
@@ -23,6 +46,7 @@ socket.on('message', (message) => {
         createdAt: moment(message.createdAt).format('h:mm a')
     });
     $messages.insertAdjacentHTML('beforeend', html);
+    autoscroll();
 });
 
 socket.on('locationMessage', (message) => {                        // Or url
@@ -33,6 +57,7 @@ socket.on('locationMessage', (message) => {                        // Or url
         createdAt: moment(message.createdAt).format('h:mm a')
     });
     $messages.insertAdjacentHTML('beforeend', html);
+    autoscroll();
 });
 
 socket.on('roomData', (users, room) => {
