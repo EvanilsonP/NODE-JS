@@ -31,6 +31,10 @@ io.on('connection', (socket) => {
         socket.emit('message', generateMessages('Admin', 'Welcome!'));                     // Message when you visite the URL; // emit to a particular connection
         // socket.broadcast.emit('message', generateMessages('A new user has joined!'));  // Emit a message to everybody but that particular connection.
         socket.broadcast.to(user.room).emit('message', generateMessages('Admin', `${user.username} has joined!`));
+        io.to(user.room).emit('roomData', {
+            room: user.room,
+            users: getUsersInRoom(user.room)
+        });
         callback();
     });
 
@@ -57,6 +61,10 @@ io.on('connection', (socket) => {
         const user = removeUser(socket.id);
         if(user) {
             io.to(user.room).emit('message', generateMessages('Admin', `${user.username} has left!`));
+            io.to(user.room).emit('roomData', {
+                room: user.room,
+                users: getUsersInRoom(user.room)
+            });
         }
     });
 });
