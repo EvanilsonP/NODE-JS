@@ -74,4 +74,9 @@ $sendLocationButton.addEventListener('click', () => {
 });
 
 // Join is going to accept the username you want to use and the room you're trying to join.
-socket.emit('join', {username, room});
+socket.emit('join', {username, room}, (error) => {
+    if(error) {
+        alert(error)
+        location.href = '/'
+    }
+});
